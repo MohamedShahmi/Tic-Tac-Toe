@@ -4,9 +4,9 @@ from tkinter import messagebox
 # Create the main window
 window = tk.Tk()
 window.title("Tic-Tac-Toe")
-window.geometry("450x500")
+window.geometry("450x530")
 window.configure(bg="#FFDAB9")  
-window.minsize(450, 500)  
+window.minsize(450, 530)  
 
 # Current player
 current_player = "X"
@@ -20,6 +20,10 @@ BUTTON_BG = "#FFFAF0"
 WINNER_BG = "lightgreen"
 SELECTED_BG = "yellow"
 ACTIVE_BG = "#E6E6FA"
+
+# Function to update the current player label
+def update_player_label():
+    player_label.config(text=f"Current Player: {current_player}")
 
 def highlight_winner(winning_positions):
     for (r, c) in winning_positions:
@@ -75,6 +79,7 @@ def on_click(row, col):
             window.after(300, lambda: ask_play_again("It's a Tie!"))
         else:
             current_player = "O" if current_player == "X" else "X"
+            update_player_label()
     
     elif (x_count >= 3 and current_player == "X") or (o_count >= 3 and current_player == "O"):
         if selected_piece is None and buttons[row][col]["text"] == current_player:
@@ -93,6 +98,7 @@ def on_click(row, col):
                 window.after(300, lambda: ask_play_again("It's a Tie!"))
             else:
                 current_player = "O" if current_player == "X" else "X"
+                update_player_label()
 
 def reset_board():
     global current_player, x_count, o_count, selected_piece
@@ -104,10 +110,15 @@ def reset_board():
         for col in range(3):
             buttons[row][col]["text"] = ""
             buttons[row][col].config(fg="black", bg=BUTTON_BG)
+    update_player_label()
+
+# Player Label
+player_label = tk.Label(window, text=f"Current Player: {current_player}", font=("Arial", 16, "bold"), bg="#FFDAB9")
+player_label.pack(pady=10)
 
 # Center frame
 frame = tk.Frame(window, bg="#FFFACD")
-frame.pack(expand=True, fill="both", padx=20, pady=20)
+frame.pack(expand=True, fill="both", padx=20, pady=10)
 
 # Grid configuration
 for row in range(3):
